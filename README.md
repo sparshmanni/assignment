@@ -74,4 +74,124 @@ If a token is cancelled:
 - Slot capacity is freed  
 - Space becomes available for new tokens  
 
+
 **API:**
+POST /api/cancel
+
+---
+
+## 👻 No-show Handling
+If a patient does not show up:
+- Token marked as NO_SHOW  
+- Removed from slot  
+- Capacity becomes available  
+
+**API:**
+POST /api/noshow
+
+---
+
+## 🚨 Emergency Handling
+Emergency tokens:
+- Highest priority  
+- Can override existing bookings  
+- May cause reallocation of lower priority tokens  
+
+**API:**
+POST /api/emergency
+
+---
+
+## 🧠 Algorithm Approach
+
+The system uses a priority-based allocation strategy.
+
+### Steps:
+1. Validate doctor and slot  
+2. Check slot capacity  
+3. If capacity available → assign token  
+4. If full → compare priorities  
+5. Replace lowest priority if required  
+6. Reallocate displaced token to next slot  
+7. If no slot available → cancel token  
+
+This ensures fairness, flexibility, and real-world practicality.
+
+---
+
+## 🏗️ Project Structure
+/
+├── models/ → Data models (Doctor, Slot, Token)
+├── engine/ → Core allocation logic
+├── services/ → Business logic
+├── routes/ → API endpoints
+├── utils/ → Priority logic
+├── simulation/ → OPD day simulation
+├── app.ts
+└── server.ts
+
+The project is structured in a modular way to keep logic clean and scalable.
+
+---
+
+## 🔌 API Endpoints
+
+
+Emergency Token
+POST /api/emergency
+Cancel Token
+POST /api/cancel
+Mark No-show
+POST /api/noshow
+Get Full Schedule
+GET /api/doctors
+
+
+##🧪 Simulation of One OPD Day
+#A simulation file is included to demonstrate:
+
+Multiple doctors
+
+Slot capacity handling
+
+Priority-based allocation
+
+Emergency insertion
+
+Token reallocation
+
+##Run simulation:
+
+- npx ts-node src/simulation/simulateDay.ts
+- This prints the final OPD schedule in the console.
+
+##⚙️ How to Run Project
+Install dependencies:
+
+npm install
+Run server:
+
+npm run dev
+Server runs at:
+
+http://localhost:3000
+⚖️ Assumptions & Trade-offs
+Assumptions
+Fixed slot timings
+
+One doctor per slot
+
+Immediate reallocation allowed
+
+No frontend included
+
+Trade-offs
+In-memory storage used for simplicity
+
+Focus kept on algorithm and backend logic
+
+Easily extendable to database if required
+
+##🏁 Conclusion
+This project demonstrates a scalable and flexible OPD token allocation engine that handles real-world scheduling challenges using priority-based allocation and dynamic slot management.
+
